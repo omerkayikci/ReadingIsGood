@@ -1,21 +1,33 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.OpenApi.Models;
 
 namespace ReadingIsGood.Api
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        private readonly IConfiguration configuration;
+        private readonly string applicationName;
+        private readonly string environmentName;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
+        {
+            this.configuration = configuration;
+            this.applicationName = env.ApplicationName;
+            this.environmentName = env.EnvironmentName;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+        .AddNewtonsoftJson();
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new OpenApiInfo { Title = $"{this.applicationName} ({this.environmentName})", Version = "v1" }))
+                    .AddSwaggerGenNewtonsoftSupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,15 +38,15 @@ namespace ReadingIsGood.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
+            app.UseRouting()
+               .UseSwagger()
+                .UseSwaggerUI(c =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{this.applicationName} V1");
+                    c.RoutePrefix = string.Empty;
+                    c.DocumentTitle = $"{this.applicationName} ({this.environmentName})";
+                })
+                .UseMvc();
         }
     }
 }
