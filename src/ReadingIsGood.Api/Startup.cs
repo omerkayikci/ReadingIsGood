@@ -5,6 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ReadingIsGood.Api.Middleware;
+using ReadingIsGood.Application;
+using ReadingIsGood.Application.Mediator;
+using ReadingIsGood.Core;
 
 namespace ReadingIsGood.Api
 {
@@ -23,6 +27,10 @@ namespace ReadingIsGood.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddServices(this.configuration)
+                    .AddMediator()
+                    .AddApplicationServices();
+
             services.AddMvc(options => options.EnableEndpointRouting = false)
         .AddNewtonsoftJson();
 
@@ -46,6 +54,7 @@ namespace ReadingIsGood.Api
                     c.RoutePrefix = string.Empty;
                     c.DocumentTitle = $"{this.applicationName} ({this.environmentName})";
                 })
+                .UseMiddleware<ExceptionHandlerMiddleware>()
                 .UseMvc();
         }
     }

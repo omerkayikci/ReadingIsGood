@@ -1,5 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ReadingIsGood.Application.Mediator.Query;
+using ReadingIsGood.Common.Models;
+using ReadingIsGood.Core.Query;
+using ReadingIsGood.Core.Response;
+using System;
 using System.Threading.Tasks;
 
 namespace ReadingIsGood.Api.Controllers
@@ -8,18 +13,21 @@ namespace ReadingIsGood.Api.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private readonly ILogger<CustomerController> logger;
+        private readonly IQueryProcessor queryProcessor;
 
-        public CustomerController(ILogger<CustomerController> logger)
+        public CustomerController(
+            ILogger<CustomerController> logger,
+            IQueryProcessor queryProcessor)
         {
-            this.logger = logger;
+            this.queryProcessor = queryProcessor;
         }
 
+        [Route("{customerId}")]
         [HttpGet]
-        public async Task<IActionResult> GetCustomers()
+        public async Task<ActionResult<ApiResponse<CustomerResponse>>> GetCustomers(Guid customerId)
         {
-            this.logger.LogInformation("created c");
-            return Ok();
+            CustomerResponse response = await queryProcessor.ProcessAsync(new GetCustomerQuery() { customerId = customerId });
+            return Ok(new ApiResponse<CustomerResponse> { Data = response });
         }
     }
 }
