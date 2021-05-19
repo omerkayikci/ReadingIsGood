@@ -17,20 +17,29 @@ namespace ReadingIsGood.Core.Repositories
             _context = _readingIsGoodContext ?? throw new ArgumentNullException(nameof(_readingIsGoodContext));
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomersAsync()
+        public async Task<IEnumerable<Customer>> GetCustomersAsync(int limit, int offset)
         {
             return await _context
                             .Customer
                             .Find(p => true)
+                            .Skip(offset)
+                            .Limit(limit)
                             .ToListAsync();
         }
 
-        public async Task<Customer?> GetCustomerAsync(Guid id)
+        public async Task<Customer?> GetCustomerAsync(string id)
         {
             return await _context
                             .Customer
-                            .Find(p => p.CustomerId == id)
+                            .Find(p => p.Id == id)
                             .FirstOrDefaultAsync();
+        }
+
+        public async Task AddCustomerAsync(Customer customer)
+        {
+            await _context
+                    .Customer
+                    .InsertOneAsync(customer);
         }
     }
 }

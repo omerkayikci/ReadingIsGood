@@ -1,14 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using ReadingIsGood.Core.CQRS;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace ReadingIsGood.Core.Entities
+namespace ReadingIsGood.Core.Request
 {
-    public class Customer
+    public class CustomerRequest : ICommand<string>
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

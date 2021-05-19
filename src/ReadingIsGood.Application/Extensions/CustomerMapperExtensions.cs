@@ -2,6 +2,7 @@
 using ReadingIsGood.Core.Response;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ReadingIsGood.Application.Extensions
@@ -17,6 +18,15 @@ namespace ReadingIsGood.Application.Extensions
                 Name = response.Name,
                 PhoneNumber = response.PhoneNumber
             };
+        }
+
+        public static IEnumerable<CustomersResponse> ToCustomersRespnse(this IEnumerable<Customer> response)
+        {
+            return response.Select(r => new CustomersResponse
+            {
+                Id = r.Id,
+                Name = r.Name
+            });
         }
     }
 }

@@ -8,5 +8,7 @@ namespace ReadingIsGood.Core.Data.Abstractions
         IMongoCollection<Customer> Customer { get; }
 
         IMongoCollection<Order> Order { get; }
+
+        IMongoCollection<Product> Product { get; }
     }
 }

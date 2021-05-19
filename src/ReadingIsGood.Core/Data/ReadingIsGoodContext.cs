@@ -16,11 +16,25 @@ namespace ReadingIsGood.Core.Data
 
             Customer = database.GetCollection<Customer>("Customers");
             Order = database.GetCollection<Order>("Orders");
-            CustomerContextSeed.SeedData(Customer);
+            Product = database.GetCollection<Product>("Product");
+            //CustomerContextSeed.SeedData(Customer);
+            //ProductContextSeed.SeedData(Product);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            Customer.Indexes.CreateOne(
+                Builders<Customer>.IndexKeys.Ascending(x => x.Name),
+                new CreateIndexOptions { Unique = true });
+
+            Product.Indexes.CreateOne(
+                Builders<Product>.IndexKeys.Ascending(x => x.SKU),
+                new CreateIndexOptions { Unique = true });
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         public IMongoCollection<Customer> Customer { get; }
 
         public IMongoCollection<Order> Order { get; }
+
+        public IMongoCollection<Product> Product { get; }
     }
 }

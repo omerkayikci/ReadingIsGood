@@ -129,7 +129,7 @@ namespace ReadingIsGood.Api.Middleware
                 else
                 {
                     this.logger.Log(LogLevel.Error, edi.SourceException, $"An unhandled exception was thrown by the application: {edi.SourceException.Message}");
-                    readingIsGoodException = new ReadingIsGoodException($"An unhandled exception was thrown by the application: {edi.SourceException.Message}", HttpStatusCode.InternalServerError, edi.SourceException);
+                    readingIsGoodException = new ReadingIsGoodException($"An error occurred", HttpStatusCode.InternalServerError, edi.SourceException);
                 }
 
                 if (context.Response.HasStarted)

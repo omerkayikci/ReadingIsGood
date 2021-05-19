@@ -24,6 +24,7 @@ namespace ReadingIsGood.Core
             services.AddSingleton<IReadingIsGoodContext, ReadingIsGoodContext>();
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IOrderRespository, OrderRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
 
             return services;
         }

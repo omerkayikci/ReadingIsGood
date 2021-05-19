@@ -7,7 +7,8 @@ namespace ReadingIsGood.Core.Repositories.Abstractions
 {
     public interface ICustomerRepository
     {
-        Task<IEnumerable<Customer>> GetCustomersAsync();
-        Task<Customer?> GetCustomerAsync(Guid id);
+        Task<IEnumerable<Customer>> GetCustomersAsync(int limit, int offset);
+        Task<Customer?> GetCustomerAsync(string id);
+        Task AddCustomerAsync(Customer customer);
     }
 }

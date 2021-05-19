@@ -7,7 +7,7 @@ namespace ReadingIsGood.Core.Validator
     {
         public GetCustomerQueryValidator()
         {
-            RuleFor(x => x.customerId).NotEmpty().WithMessage("Invalid uid");
+            RuleFor(x => x.customerId).NotEmpty().WithMessage("Invalid customer id.");
         }
     }
 }

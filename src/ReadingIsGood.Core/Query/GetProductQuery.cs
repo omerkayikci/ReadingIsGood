@@ -6,8 +6,8 @@ using System.Text;
 
 namespace ReadingIsGood.Core.Query
 {
-    public class GetCustomerQuery : IQuery<CustomerResponse>
+    public class GetProductQuery : IQuery<ProductResponse>
     {
-        public string? customerId { get; set; }
+        public string productId { get; set; } = string.Empty;
     }
 }
