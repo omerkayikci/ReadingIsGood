@@ -22,11 +22,7 @@ namespace ReadingIsGood.Application.Service
 
         public async Task<string> AddProductAsync(ProductRequest request)
         {
-            Product product = new Product
-            {
-                SKU = request.SKU,
-                Stock = request.Stock
-            };
+            Product product = request.ToProduct();
 
             await this.productRepository.AddProductAsync(product);
 

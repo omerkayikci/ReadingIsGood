@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ReadingIsGood.Common\ReadingIsGood.Common.csproj" />
+    <ProjectReference Include="..\ReadingIsGood.MongoDB\ReadingIsGood.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>

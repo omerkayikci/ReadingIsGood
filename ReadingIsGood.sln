@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingIsGood.Application", "src\ReadingIsGood.Application\ReadingIsGood.Application.csproj", "{7DFDB8C9-B7CC-4112-BA77-9C35D93FD415}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadingIsGood.Application", "src\ReadingIsGood.Application\ReadingIsGood.Application.csproj", "{7DFDB8C9-B7CC-4112-BA77-9C35D93FD415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadingIsGood.MongoDB", "src\ReadingIsGood.MongoDB\ReadingIsGood.MongoDB.csproj", "{9444B9CE-2322-40CE-BDD9-5FBD4B7BDDF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{7DFDB8C9-B7CC-4112-BA77-9C35D93FD415}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DFDB8C9-B7CC-4112-BA77-9C35D93FD415}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DFDB8C9-B7CC-4112-BA77-9C35D93FD415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9444B9CE-2322-40CE-BDD9-5FBD4B7BDDF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9444B9CE-2322-40CE-BDD9-5FBD4B7BDDF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9444B9CE-2322-40CE-BDD9-5FBD4B7BDDF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9444B9CE-2322-40CE-BDD9-5FBD4B7BDDF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{8E65DA36-8154-4035-9935-19CB747784E9} = {B0B3C51E-1A74-4086-9B9A-409E714F6068}
 		{5EA2507B-BB2C-4366-94A4-9E3DD515F366} = {B0B3C51E-1A74-4086-9B9A-409E714F6068}
 		{7DFDB8C9-B7CC-4112-BA77-9C35D93FD415} = {B0B3C51E-1A74-4086-9B9A-409E714F6068}
+		{9444B9CE-2322-40CE-BDD9-5FBD4B7BDDF2} = {B0B3C51E-1A74-4086-9B9A-409E714F6068}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93D7ED13-B067-4847-90FF-603E6800486D}

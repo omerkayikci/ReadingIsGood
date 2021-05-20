@@ -1,4 +1,5 @@
 ﻿using ReadingIsGood.Core.Entities;
+using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,15 @@ namespace ReadingIsGood.Application.Extensions
                 CreatedDateTime = response.CreatedDateTime,
                 Stock = response.Stock,
                 UpdatedDateTime = response.UpdatedDateTime
+            };
+        }
+
+        public static Product ToProduct(this ProductRequest request)
+        {
+            return new Product
+            {
+                SKU = request.SKU,
+                Stock = request.Stock
             };
         }
     }

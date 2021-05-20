@@ -1,14 +1,11 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using ReadingIsGood.MongoDB.Abstractions;
 using System;
 
 namespace ReadingIsGood.Core.Entities
 {
-    public class Product
+    public class Product : IEntity<string>
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; }
 
         public string SKU { get; set; } = string.Empty;
 

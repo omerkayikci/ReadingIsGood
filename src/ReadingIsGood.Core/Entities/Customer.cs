@@ -1,13 +1,9 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using ReadingIsGood.MongoDB.Abstractions;
 
 namespace ReadingIsGood.Core.Entities
 {
-    public class Customer
+    public class Customer : IEntity<string>
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;

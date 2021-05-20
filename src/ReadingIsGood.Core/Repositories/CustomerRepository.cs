@@ -1,8 +1,6 @@
-﻿using MongoDB.Driver;
-using ReadingIsGood.Core.Data.Abstractions;
-using ReadingIsGood.Core.Entities;
+﻿using ReadingIsGood.Core.Entities;
 using ReadingIsGood.Core.Repositories.Abstractions;
-using System;
+using ReadingIsGood.MongoDB.Abstractions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,36 +8,32 @@ namespace ReadingIsGood.Core.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        private readonly IReadingIsGoodContext _context;
-
-        public CustomerRepository(IReadingIsGoodContext _readingIsGoodContext)
+        private readonly IGenericRepository<Customer, string> genericRepository;
+        public CustomerRepository(
+            IGenericRepository<Customer, string> genericRepository)
         {
-            _context = _readingIsGoodContext ?? throw new ArgumentNullException(nameof(_readingIsGoodContext));
+            this.genericRepository = genericRepository;
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomersAsync(int limit, int offset)
+        public async Task<IReadOnlyList<Customer>> GetCustomersAsync(int limit, int offset)
         {
-            return await _context
-                            .Customer
-                            .Find(p => true)
-                            .Skip(offset)
-                            .Limit(limit)
-                            .ToListAsync();
+            return await this.genericRepository
+                                .Query()
+                                .Skip(offset)
+                                .Take(limit)
+                                .ToListAsync();
         }
 
         public async Task<Customer?> GetCustomerAsync(string id)
         {
-            return await _context
-                            .Customer
-                            .Find(p => p.Id == id)
-                            .FirstOrDefaultAsync();
+            return await this.genericRepository
+                                .GetByIdAsync(id);
         }
 
         public async Task AddCustomerAsync(Customer customer)
         {
-            await _context
-                    .Customer
-                    .InsertOneAsync(customer);
+            await this.genericRepository
+                                .AddOneAsync(customer);
         }
     }
 }

@@ -1,10 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ReadingIsGood.Core.Data;
-using ReadingIsGood.Core.Data.Abstractions;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
+using ReadingIsGood.Core.Entities;
 using ReadingIsGood.Core.Options;
 using ReadingIsGood.Core.Repositories;
 using ReadingIsGood.Core.Repositories.Abstractions;
+using ReadingIsGood.MongoDB;
+using ReadingIsGood.MongoDB.Abstractions;
 
 namespace ReadingIsGood.Core
 {
@@ -12,19 +17,58 @@ namespace ReadingIsGood.Core
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMongoDB();
+            services.AddMongoOptionDriver()
+                    .AddMongoDB();
 
-            services.Configure<DatabaseSettings>(configuration.GetSection("ReadingIsGoodDatabaseSettings"));
+
+            services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbOptions"))
+                    .Configure<AuthenticationOptions>(configuration.GetSection("AuthenticationOptions"));
 
             return services;
         }
 
+        public static IServiceCollection AddMongoOptionDriver(this IServiceCollection services)
+        {
+            BsonClassMap.RegisterClassMap<Customer>(pm =>
+           {
+               pm.AutoMap();
+               pm.MapIdProperty(p => p.Id)
+               .SetSerializer(new StringSerializer(BsonType.ObjectId))
+               .SetIdGenerator(StringObjectIdGenerator.Instance);
+               pm.SetIgnoreExtraElements(true);
+           });
+
+            BsonClassMap.RegisterClassMap<Product>(pm =>
+            {
+                pm.AutoMap();
+                pm.MapIdProperty(p => p.Id)
+                .SetSerializer(new StringSerializer(BsonType.ObjectId))
+                .SetIdGenerator(StringObjectIdGenerator.Instance);
+                pm.SetIgnoreExtraElements(true);
+            });
+
+            BsonClassMap.RegisterClassMap<User>(pm =>
+            {
+                pm.AutoMap();
+                pm.MapIdProperty(p => p.Id)
+                .SetSerializer(new StringSerializer(BsonType.ObjectId))
+                .SetIdGenerator(StringObjectIdGenerator.Instance);
+                pm.SetIgnoreExtraElements(true);
+            });
+
+            return services;
+        }
+
+
         public static IServiceCollection AddMongoDB(this IServiceCollection services)
         {
-            services.AddSingleton<IReadingIsGoodContext, ReadingIsGoodContext>();
+            services.AddSingleton(typeof(IDatabaseConnection), typeof(MongoDBDatabaseConnection));
+
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<ICustomerRepository, CustomerRepository>();
             services.AddSingleton<IOrderRespository, OrderRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton(typeof(IGenericRepository<,>), typeof(MongoDbRepository<,>));
 
             return services;
         }

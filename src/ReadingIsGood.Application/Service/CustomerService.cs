@@ -7,7 +7,7 @@ using ReadingIsGood.Core.Repositories.Abstractions;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
 using ReadingIsGood.Core.Services.Abstractions;
-using System;
+using ReadingIsGood.MongoDB.Abstractions;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -17,21 +17,19 @@ namespace ReadingIsGood.Application.Service
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository customerRepository;
-        public CustomerService(ICustomerRepository customerRepository)
+        private readonly IUserRepository userRepository;
+        public CustomerService(ICustomerRepository customerRepository,
+            IUserRepository userRepository)
         {
             this.customerRepository = customerRepository;
+            this.userRepository = userRepository;
         }
 
         public async Task<string> AddCustomerAsync(CustomerRequest request)
         {
-            Customer customer = new Customer
-            {
-                Name = request.Name,
-                Address = request.Address,
-                Email = request.Email,
-                PhoneNumber = request.PhoneNumber
-            };
+            Customer customer = request.ToCustomer();
 
+            await this.userRepository.AddUserAsync(request.ToCustomerUser(customer.Id));
             await this.customerRepository.AddCustomerAsync(customer);
 
             return customer.Id;
@@ -39,7 +37,7 @@ namespace ReadingIsGood.Application.Service
 
         public async Task<CustomerResponse> GetCustomerAsync(GetCustomerQuery request)
         {
-            Customer? customer = await this.customerRepository.GetCustomerAsync(request.customerId);
+            Customer? customer = await this.customerRepository.GetCustomerAsync(request.customerId!);
 
             if (customer == null)
             {

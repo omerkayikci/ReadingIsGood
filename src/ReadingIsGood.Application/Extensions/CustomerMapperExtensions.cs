@@ -1,4 +1,5 @@
 ﻿using ReadingIsGood.Core.Entities;
+using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,27 @@ namespace ReadingIsGood.Application.Extensions
                 Id = r.Id,
                 Name = r.Name
             });
+        }
+
+        public static Customer ToCustomer(this CustomerRequest request)
+        {
+            return new Customer
+            {
+                Name = request.Name,
+                Address = request.Address,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+            };
+        }
+
+        public static User ToCustomerUser(this CustomerRequest request, string customerId)
+        {
+            return new User
+            {
+                CustomerId = customerId,
+                Password = request.Password,
+                Username = request.Username
+            };
         }
     }
 }

@@ -150,8 +150,6 @@ namespace ReadingIsGood.Api.Middleware
                 context.Features.Set<IExceptionHandlerPathFeature>(exceptionHandlerFeature);
                 context.Response.OnStarting(this.clearCacheHeadersDelegate, context.Response);
 
-                //context.Request.Headers.TryGetValue(CommandApiConstants.HeaderCorreleationIdKey, out StringValues traceIds);
-
                 var error = new Dictionary<string, object?>
                 {
                     ["data"] = readingIsGoodException.ErrorData,
