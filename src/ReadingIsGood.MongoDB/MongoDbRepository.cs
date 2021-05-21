@@ -4,6 +4,7 @@ using MongoDB.Driver.Linq;
 using Pluralize.NET;
 using ReadingIsGood.MongoDB.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -90,6 +91,21 @@ namespace ReadingIsGood.MongoDB
         public async Task<TEntity?> GetByIdAsync(TId id)
         {
             return await this.Collection.AsQueryable().Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+        }
+
+        public void AddMany(IEnumerable<TEntity> entity)
+        {
+            this.Collection.InsertMany(entity);
+        }
+
+        public async Task AddManyAsync(IEnumerable<TEntity> entity)
+        {
+            await this.Collection.InsertManyAsync(entity);
+        }
+
+        public void AddOne(TEntity entity)
+        {
+            this.Collection.InsertOne(entity);
         }
 
         public async Task AddOneAsync(TEntity entity)

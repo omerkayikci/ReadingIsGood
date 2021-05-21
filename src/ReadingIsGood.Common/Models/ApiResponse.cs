@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ReadingIsGood.Common.Models
+﻿namespace ReadingIsGood.Common.Models
 {
     public class ApiResponse<T> where T : class
     {

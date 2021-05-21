@@ -1,17 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using ReadingIsGood.Common.ExceptionHandling;
 using ReadingIsGood.Core.Options;
 using ReadingIsGood.Core.Repositories.Abstractions;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Services.Abstractions;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using ReadingIsGood.Common.ExceptionHandling;
 
 namespace ReadingIsGood.Application.Service
 {
@@ -60,7 +60,7 @@ namespace ReadingIsGood.Application.Service
                 issuer: this.authOptions.Issuer,
                 audience: this.authOptions.Audience,
                 claims: someClaims,
-                expires: DateTime.Now.AddMinutes(3),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256)
             );
 

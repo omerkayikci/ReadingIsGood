@@ -1,7 +1,4 @@
 ﻿using ReadingIsGood.Core.CQRS;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ReadingIsGood.Core.Request
 {

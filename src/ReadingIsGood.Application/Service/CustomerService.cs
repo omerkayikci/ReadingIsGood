@@ -7,7 +7,6 @@ using ReadingIsGood.Core.Repositories.Abstractions;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
 using ReadingIsGood.Core.Services.Abstractions;
-using ReadingIsGood.MongoDB.Abstractions;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;

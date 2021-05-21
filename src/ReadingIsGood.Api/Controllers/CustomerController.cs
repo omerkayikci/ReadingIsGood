@@ -7,13 +7,13 @@ using ReadingIsGood.Common.Models;
 using ReadingIsGood.Core.Query;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ReadingIsGood.Api.Controllers
 {
     [Route("customers")]
+    [Authorize()]
     [ApiController]
     public class CustomerController : ControllerBase
     {
@@ -34,6 +34,8 @@ namespace ReadingIsGood.Api.Controllers
         /// </summary>
         /// <param name="request">Limit&Offset</param>
         /// <returns></returns>
+
+        [AllowAnonymous()]
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<CustomersResponse>>>> GetCustomers([FromQuery] GetCustomersQuery request)
         {
@@ -49,7 +51,7 @@ namespace ReadingIsGood.Api.Controllers
             return Ok(new ApiResponse<CustomerResponse> { Data = response });
         }
 
-
+        [AllowAnonymous()]
         [HttpPost]
         public async Task<ActionResult<ApiResponse<string>>> CreateCustomerAsync([FromBody] CustomerRequest request)
         {

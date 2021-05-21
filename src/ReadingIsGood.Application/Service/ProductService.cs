@@ -31,7 +31,7 @@ namespace ReadingIsGood.Application.Service
 
         public async Task<ProductResponse> GetProductAsync(GetProductQuery query)
         {
-            Product? product = await this.productRepository.GetProductAsync(query.productId);
+            Product? product = await this.productRepository.GetProductByIdAsync(query.productId);
 
             if (product == null)
             {
@@ -43,7 +43,7 @@ namespace ReadingIsGood.Application.Service
 
         public async Task<string> UpdateProductStockAsync(UpdateStockRequest request)
         {
-            string? id = await this.productRepository.UpdateProductStockAsync(request.Id, request.Stock, request.UpdatedDateTime);
+            string? id = await this.productRepository.UpdateProductStockAsync(request.Id, request.Stock, request.UpdatedDateTime, request.IsDecrease);
 
             if (string.IsNullOrEmpty(id))
             {

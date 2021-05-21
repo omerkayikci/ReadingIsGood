@@ -17,11 +17,13 @@ namespace ReadingIsGood.Core.Repositories
 
         public async Task<IReadOnlyList<Customer>> GetCustomersAsync(int limit, int offset)
         {
-            return await this.genericRepository
+            IReadOnlyList<Customer>? customers = await this.genericRepository
                                 .Query()
                                 .Skip(offset)
                                 .Take(limit)
                                 .ToListAsync();
+
+            return customers != null ? customers : new List<Customer>();
         }
 
         public async Task<Customer?> GetCustomerAsync(string id)

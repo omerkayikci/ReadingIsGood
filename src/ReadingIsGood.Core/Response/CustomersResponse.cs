@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ReadingIsGood.Core.Response
+﻿namespace ReadingIsGood.Core.Response
 {
     public class CustomersResponse
     {

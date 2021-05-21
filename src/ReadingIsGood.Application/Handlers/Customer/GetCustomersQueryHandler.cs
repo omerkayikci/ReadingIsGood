@@ -2,9 +2,7 @@
 using ReadingIsGood.Core.Query;
 using ReadingIsGood.Core.Response;
 using ReadingIsGood.Core.Services.Abstractions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

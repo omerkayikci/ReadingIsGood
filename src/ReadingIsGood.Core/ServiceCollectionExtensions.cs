@@ -5,9 +5,10 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Serializers;
 using ReadingIsGood.Core.Entities;
-using ReadingIsGood.Core.Options;
 using ReadingIsGood.Core.Repositories;
 using ReadingIsGood.Core.Repositories.Abstractions;
+using ReadingIsGood.Core.Services;
+using ReadingIsGood.Core.Services.Abstractions;
 using ReadingIsGood.MongoDB;
 using ReadingIsGood.MongoDB.Abstractions;
 
@@ -20,9 +21,9 @@ namespace ReadingIsGood.Core
             services.AddMongoOptionDriver()
                     .AddMongoDB();
 
+            services.AddSingleton<ISeedService, SeedService>();
 
-            services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbOptions"))
-                    .Configure<AuthenticationOptions>(configuration.GetSection("AuthenticationOptions"));
+            services.Configure<MongoDbOptions>(configuration.GetSection("MongoDbOptions"));
 
             return services;
         }
@@ -48,6 +49,15 @@ namespace ReadingIsGood.Core
             });
 
             BsonClassMap.RegisterClassMap<User>(pm =>
+            {
+                pm.AutoMap();
+                pm.MapIdProperty(p => p.Id)
+                .SetSerializer(new StringSerializer(BsonType.ObjectId))
+                .SetIdGenerator(StringObjectIdGenerator.Instance);
+                pm.SetIgnoreExtraElements(true);
+            });
+
+            BsonClassMap.RegisterClassMap<Order>(pm =>
             {
                 pm.AutoMap();
                 pm.MapIdProperty(p => p.Id)

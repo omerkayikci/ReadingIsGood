@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ReadingIsGood.MongoDB.Abstractions
@@ -17,6 +18,12 @@ namespace ReadingIsGood.MongoDB.Abstractions
         bool DropCollection();
 
         Task<TEntity?> GetByIdAsync(TId id);
+
+        void AddMany(IEnumerable<TEntity> entity);
+
+        Task AddManyAsync(IEnumerable<TEntity> entity);
+
+        void AddOne(TEntity entity);
 
         Task AddOneAsync(TEntity entity);
 

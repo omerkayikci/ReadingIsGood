@@ -1,10 +1,8 @@
 ﻿using ReadingIsGood.Core.Entities;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ReadingIsGood.Application.Extensions
 {

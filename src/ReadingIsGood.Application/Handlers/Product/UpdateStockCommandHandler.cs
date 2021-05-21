@@ -1,9 +1,6 @@
 ﻿using ReadingIsGood.Application.Mediator.Command;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Services.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
