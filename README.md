@@ -46,4 +46,5 @@ The project consists of api, application, common, core and MongoDB layers.
 ## Ideas ##
 1. Since replicaSet is required for MongoDB Trancastion, it can be used by making the necessary definitions in the dockercompose ymal file. (suggested action could not be taken.)
 2. With the transaction structure, stock reduction in parallel with the order process can be done at the same time and in case of error, the entire transaction can be roolbacked and inventory tracking can be monitored instantly.
-3. As a test, I think it is more beneficial to write a Behavior Driven test with "SpecFlow". There was no situation related to "testing" in the requested project text.
+3. Additionally, you can process orders sequentially using outbox pattern and RabbitMQ. During the order processing phase, you can update the stock status in parallel with the transaction structure and take necessary actions in case of no acknowledge.
+4. As a test, I think it is more beneficial to write a Behavior Driven test with "SpecFlow". There was no situation related to "testing" in the requested project text.
