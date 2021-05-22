@@ -43,6 +43,10 @@ The project consists of api, application, common, core and MongoDB layers.
 -  Core Layer contains the structures in which the process of the project takes place. These are Validation, Repository, Abstract Service etc.
 -  MongoDB Layer contains a generic structure built on mongodb builder. This structure allows you to create a collection for the specified entity, as well as to perform operations on it.
 
+- The reason why try-catch blocks are not used is to ensure that errors can be handled automatically with the "exceptionMiddlware" used. In addition to this, separate catch blocks can be placed to catch MongoException or JsonException(like model attribute) type errors.
+
+- It has been adjusted to write to console in the config file by choosing nlog as log.
+
 ## Ideas ##
 1. Since replicaSet is required for MongoDB Trancastion, it can be used by making the necessary definitions in the dockercompose ymal file. (suggested action could not be taken.)
 2. With the transaction structure, stock reduction in parallel with the order process can be done at the same time and in case of error, the entire transaction can be roolbacked and inventory tracking can be monitored instantly.
