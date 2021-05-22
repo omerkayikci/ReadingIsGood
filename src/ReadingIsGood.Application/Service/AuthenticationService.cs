@@ -42,14 +42,14 @@ namespace ReadingIsGood.Application.Service
 
                 var token = CreateJwtBearer(someClaims);
 
-                this.logger.LogInformation("JWT Token Created");
+                this.logger.LogInformation("JWT Token created.");
 
                 return new JwtSecurityTokenHandler().WriteToken(token);
             }
 
-            this.logger.LogError("UserName Or Password Wrongly Entered");
+            this.logger.LogError("Username or Password wrongly entered");
 
-            throw new ReadingIsGoodException("UserName And Password Not Valid", HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
+            throw new ReadingIsGoodException("Username or Password wrongly entered", HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
         }
 
         private JwtSecurityToken CreateJwtBearer(Claim[] someClaims)

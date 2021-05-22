@@ -17,11 +17,14 @@ namespace ReadingIsGood.Application.Service
     {
         private readonly ICustomerRepository customerRepository;
         private readonly IUserRepository userRepository;
+        private ILogger<CustomerService> logger;
         public CustomerService(ICustomerRepository customerRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ILogger<CustomerService> logger)
         {
             this.customerRepository = customerRepository;
             this.userRepository = userRepository;
+            this.logger = logger;
         }
 
         public async Task<string> AddCustomerAsync(CustomerRequest request)
@@ -40,7 +43,8 @@ namespace ReadingIsGood.Application.Service
 
             if (customer == null)
             {
-                throw new ReadingIsGoodException($"The customer not found by customer id. Id: {request.customerId}", HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
+                this.logger.LogWarning($"The customer not found by customer id.Id: { request.customerId}");
+                throw new ReadingIsGoodException($"The customer not found by customer id", HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
             }
 
             return customer.ToCustomerResponse();

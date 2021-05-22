@@ -10,6 +10,7 @@ using ReadingIsGood.Core.Response;
 using ReadingIsGood.Core.Services.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ReadingIsGood.Application.Service
@@ -18,11 +19,14 @@ namespace ReadingIsGood.Application.Service
     {
         private readonly IOrderRespository orderRespository;
         private readonly IProductRepository productRepository;
+        private readonly ILogger<OrderService> logger;
         public OrderService(IOrderRespository orderRespository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            ILogger<OrderService> logger)
         {
             this.orderRespository = orderRespository;
             this.productRepository = productRepository;
+            this.logger = logger;
         }
 
         public async Task<string> CreateOrderAsync(CreateOrderRequest orderRequest)
@@ -35,17 +39,20 @@ namespace ReadingIsGood.Application.Service
 
                 if (product == null)
                 {
-                    throw new ReadingIsGoodException($"Product cannot be null", System.Net.HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
+                    this.logger.LogWarning($"Product cannot be null. ProductId:{orderItem.ProductId}");
+                    throw new ReadingIsGoodException($"Product cannot be null", HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
                 }
 
                 if (product.Stock <= 0)
                 {
-                    throw new ReadingIsGoodException($"Stock value is non-tradable value. Stock:{product.Stock}, ProductId:{product.Id}", System.Net.HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
+                    this.logger.LogWarning($"Stock value is non-tradable value. Stock:{product.Stock}, ProductId:{product.Id}");
+                    throw new ReadingIsGoodException("Stock value is non-tradable value.", HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
                 }
 
                 if (!await this.productRepository.CheckProductStockAvailablityAsync(product, orderItem.Quantity))
                 {
-                    throw new ReadingIsGoodException($"there is insufficient stock in the system. TraceId: {orderItem.TraceId}", System.Net.HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
+                    this.logger.LogWarning($"There is insufficient stock in the system. TraceId: {orderItem.TraceId}");
+                    throw new ReadingIsGoodException("There is insufficient stock in the system.", HttpStatusCode.BadRequest, logLevel: LogLevel.Warning);
                 }
 
                 await this.productRepository.UpdateProductStockAsync(orderItem.ProductId, orderItem.Quantity, DateTime.UtcNow, true);
@@ -62,7 +69,8 @@ namespace ReadingIsGood.Application.Service
 
             if (order == null)
             {
-                throw new ReadingIsGoodException($"Order not found: OrderId: {getOrderrequest.OrderId}, CustomerId: {getOrderrequest.CustomerId}", System.Net.HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
+                this.logger.LogWarning($"Order not found: OrderId: {getOrderrequest.OrderId}, CustomerId: {getOrderrequest.CustomerId}");
+                throw new ReadingIsGoodException("Order not found", HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
             }
 
             return order.ToOrderResponse();
@@ -91,7 +99,8 @@ namespace ReadingIsGood.Application.Service
 
             if (order == null)
             {
-                throw new ReadingIsGoodException($"Order not found: OrderId: {orderStatusUpdateRequest.OrderId}", System.Net.HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
+                this.logger.LogWarning($"Order not found: OrderId: {orderStatusUpdateRequest.OrderId}, CustomerId: {orderStatusUpdateRequest.CustomerId}");
+                throw new ReadingIsGoodException($"Order not found.", HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
             }
 
             order.OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), orderStatusUpdateRequest.OrderStatus);

@@ -15,9 +15,12 @@ namespace ReadingIsGood.Application.Service
     public class ProductService : IProductService
     {
         private readonly IProductRepository productRepository;
-        public ProductService(IProductRepository productRepository)
+        private ILogger<ProductService> logger;
+        public ProductService(IProductRepository productRepository,
+            ILogger<ProductService> logger)
         {
             this.productRepository = productRepository;
+            this.logger = logger;
         }
 
         public async Task<string> AddProductAsync(ProductRequest request)
@@ -35,7 +38,8 @@ namespace ReadingIsGood.Application.Service
 
             if (product == null)
             {
-                throw new ReadingIsGoodException($"The customer not found by product id. Id: {query.productId}", HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
+                this.logger.LogWarning($"The product not found by product id. Id: {query.productId}");
+                throw new ReadingIsGoodException("The product not found by product id", HttpStatusCode.NotFound, logLevel: LogLevel.Warning);
             }
 
             return product.ToProductResponse();
@@ -47,7 +51,8 @@ namespace ReadingIsGood.Application.Service
 
             if (string.IsNullOrEmpty(id))
             {
-                throw new ReadingIsGoodException($"The customer not updated stock by product id. Id: {request.Id}", HttpStatusCode.InternalServerError, logLevel: LogLevel.Warning);
+                this.logger.LogWarning($"The product not updated stock by product id. Id: {request.Id}");
+                throw new ReadingIsGoodException("The product not updated stock by product id.", HttpStatusCode.InternalServerError, logLevel: LogLevel.Warning);
             }
 
             return id;
