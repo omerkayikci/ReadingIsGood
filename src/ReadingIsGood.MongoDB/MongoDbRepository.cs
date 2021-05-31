@@ -5,6 +5,7 @@ using Pluralize.NET;
 using ReadingIsGood.MongoDB.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -108,9 +109,18 @@ namespace ReadingIsGood.MongoDB
             this.Collection.InsertOne(entity);
         }
 
-        public async Task AddOneAsync(TEntity entity)
+        public async Task AddOneAsync(TEntity entity, ITransactionScope? transactionScope = null)
         {
-            await this.Collection.InsertOneAsync(entity);
+            //await this.Collection.InsertOneAsync(entity);
+
+            if (TryGetCurrentSession(transactionScope, out IClientSessionHandle? session))
+            {
+                await this.Collection.InsertOneAsync(session, entity);
+            }
+            else
+            {
+                await this.Collection.InsertOneAsync(entity);
+            }
         }
 
         public async Task DeleteAsync(TEntity entity)
@@ -141,6 +151,28 @@ namespace ReadingIsGood.MongoDB
         public IGenericRepositoryQueryBuilder<TEntity> Query()
         {
             return new MongoDbRepositoryQueryBuilder<TEntity>(this.Collection.AsQueryable());
+        }
+
+        public async Task<ITransactionScope> BeginTransactionScopeAsync()
+        {
+            return await this.databaseConnection.BeginTransactionScopeAsync();
+        }
+
+        public ITransactionScope BeginTransactionScope()
+        {
+            return this.databaseConnection.BeginTransactionScope();
+        }
+
+        private static bool TryGetCurrentSession(ITransactionScope? transactionScope, [NotNullWhen(true)] out IClientSessionHandle? session)
+        {
+            if (transactionScope is MongoDBTransactionScope mongoDBTransactionScope)
+            {
+                session = mongoDBTransactionScope.Session;
+                return true;
+            }
+
+            session = null;
+            return false;
         }
     }
 }

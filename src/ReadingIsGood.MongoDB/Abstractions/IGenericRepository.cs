@@ -25,13 +25,17 @@ namespace ReadingIsGood.MongoDB.Abstractions
 
         void AddOne(TEntity entity);
 
-        Task AddOneAsync(TEntity entity);
+        Task AddOneAsync(TEntity entity, ITransactionScope? transactionScope = null);
 
         Task UpdateAsync(TEntity entity);
 
         Task DeleteAsync(TEntity entity);
 
         IGenericRepositoryQueryBuilder<TEntity> Query();
+
+        Task<ITransactionScope> BeginTransactionScopeAsync();
+
+        ITransactionScope BeginTransactionScope();
 
     }
 }

@@ -48,5 +48,11 @@ namespace ReadingIsGood.Core.Repositories
 
             return order.Id;
         }
+        public async Task<ITransactionScope> BeginTransactionScopeAsync()
+        {
+            ITransactionScope transactionScope = await this.genericRepository.BeginTransactionScopeAsync();
+            transactionScope.BeginTransaction();
+            return transactionScope;
+        }
     }
 }

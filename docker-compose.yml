@@ -24,6 +24,9 @@ services:
             - app-network
         volumes:
             -  mongo-data:/data:db   
+        #TODO: replicaSet with auth with Mongo keyFile ????
+        #TODO: Multiple mongoDb defination ????? 
+        command: mongod --auth --keyFile --replSet replset --keyFile /tmp/keyfile.key
 
     mongo-express:
         image: mongo-express

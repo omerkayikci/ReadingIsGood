@@ -8,6 +8,7 @@ using ReadingIsGood.Core.Repositories.Abstractions;
 using ReadingIsGood.Core.Request;
 using ReadingIsGood.Core.Response;
 using ReadingIsGood.Core.Services.Abstractions;
+using ReadingIsGood.MongoDB.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -32,6 +33,8 @@ namespace ReadingIsGood.Application.Service
         public async Task<string> CreateOrderAsync(CreateOrderRequest orderRequest)
         {
             Order order = orderRequest.ToOrder();
+
+            using ITransactionScope transactionScope = await this.orderRespository.BeginTransactionScopeAsync();
 
             foreach (var orderItem in order.OrderItems)
             {
@@ -59,6 +62,8 @@ namespace ReadingIsGood.Application.Service
             }
 
             await this.orderRespository.CreateOrderAsync(order);
+
+            await transactionScope.CommitTransactionAsync();
 
             return order.Id;
         }
